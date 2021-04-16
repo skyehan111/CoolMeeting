@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.skye.meeting.mapper.EmployeeMapper">
+    <select id="loadEmpByUsername" resultType="Employee">
+        select * from employee where username=#{username};
+    </select>
+
+    <select id="getAllEmpsByStatus" resultType="Employee">
+        select * from employee where status=#{status};
+    </select>
+
+    <select id="getAllEmps" resultType="Employee">
+        select * from employee
+        <where>
+            status=#{emp.status}
+        <if test="emp.employeename!=null and emp.employeename!=''">
+            and employeename=#{emp.employeename}
+        </if>
+        <if test="emp.username!=null and emp.username!=''">
+            and username=#{emp.username}
+        </if>
+        </where>
+        limit #{start},#{pagesize}
+    </select>
+
+    <select id="getTotal" resultType="Long">
+        select count(*) from employee
+        <where>
+            status=#{status}
+        <if test="employeename!=null and employeename!=''">
+            and employeename=#{employeename}
+        </if>
+        <if test="username!=null and username!=''">
+            and username=#{username}
+        </if>
+        </where>
+    </select>
+    
+    <select id="getEmpsByDepId" resultType="Employee">
+        select * from employee where departmentid=#{depId};
+    </select>
+
+    <insert id="doReg" parameterType="Employee">
+        insert into employee (employeename,username,phone,email,status,departmentid,password,role)
+        values (#{employeename},#{username},#{phone},#{email},#{status},#{departmentid},#{password},#{role});
+    </insert>
+
+    <update id="updatestatus">
+        update employee set status = #{status} where employeeid=#{employeeid} ;
+    </update>
+</mapper>
